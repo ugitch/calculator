@@ -1,6 +1,7 @@
 let buffer = "0";
-let runningTotal = 0;
+let accum = 0;
 let operator = null;
+let resetBuffer = false;
 
 const screen = document.querySelector(".screen");
 
@@ -16,6 +17,9 @@ function buttonClick(value) {
 function handleDigit(value) {
   if (buffer === "0") {
     buffer = value;
+  } else if (resetBuffer) {
+    resetBuffer = false;
+    buffer = value;
   } else {
     buffer += value;
   }
@@ -25,7 +29,7 @@ function handleSymbol(value) {
   switch(value) {
     case "C":
       buffer = "0";
-      runningTotal = 0;
+      accum = 0;
       operator = null;
       break;
     case "←":
@@ -40,9 +44,10 @@ function handleSymbol(value) {
         return;
       }
       flushOperation(parseInt(buffer));
+      resetBuffer = true;
       operator = null;
-      buffer = "" + runningTotal;
-      runningTotal = 0;
+      buffer = "" + accum;
+      accum = 0;
       break;
     case "+":
     case "-":
@@ -60,25 +65,25 @@ function handleMath(value) {
     return;
   }
 
-  if (runningTotal === 0) {
-    runningTotal = intBuffer;
+  if (accum === 0) {
+    accum = intBuffer;
   } else {
     flushOperation(intBuffer);
   }
 
-  operator = value;
   buffer = "0";
+  operator = value;
 }
 
 function flushOperation(value) {
   if (operator === "+") {
-    runningTotal += value;
+    accum += value;
   } else if (operator === "-") {
-    runningTotal -= value;
+    accum -= value;
   } else if (operator === "×") {
-    runningTotal *= value;
+    accum *= value;
   } else {
-    runningTotal /= value;
+    accum /= value;
   }
 }
 
