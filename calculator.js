@@ -6,7 +6,9 @@ let resetBuffer = false;
 const screen = document.querySelector(".screen");
 
 function buttonClick(value) {
-  if (isNaN(parseInt(value))) {
+  if (value === ".") {
+    handleDigit(value);
+  } else if (isNaN(parseFloat(value))) {
     handleSymbol(value);
   } else {
     handleDigit(value);
@@ -23,6 +25,9 @@ function handleDigit(value) {
 
   if (buffer === "0") {
     buffer = value;
+  } else if (value === "." && buffer.indexOf(".") !== -1) {
+    buffer += value;
+    return;
   } else {
     buffer += value;
   }
@@ -46,7 +51,7 @@ function handleSymbol(value) {
       if (operator === null) {
         return;
       }
-      flushOperation(parseInt(buffer));
+      flushOperation(parseFloat(buffer));
       resetBuffer = true;
       operator = null;
       buffer = "" + accum;
@@ -62,7 +67,7 @@ function handleSymbol(value) {
 }
 
 function handleMath(value) {
-  const intBuffer = parseInt(buffer);
+  const intBuffer = parseFloat(buffer);
 
   if (intBuffer === 0) {
     return;
