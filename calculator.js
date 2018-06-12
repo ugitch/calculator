@@ -2,6 +2,7 @@ let buffer = "0";
 let accum = 0;
 let operator = null;
 let resetBuffer = false;
+let resetOperation = false;
 
 const screen = document.querySelector(".screen");
 
@@ -18,7 +19,11 @@ function handleDigit(value) {
   if (buffer === "0") {
     buffer = value;
   } else if (resetBuffer) {
+    accum = buffer;
     resetBuffer = false;
+    buffer = value;
+  } else if (resetOperation) {
+    resetOperation = false;
     buffer = value;
   } else {
     buffer += value;
@@ -44,7 +49,7 @@ function handleSymbol(value) {
         return;
       }
       flushOperation(parseInt(buffer));
-      resetBuffer = true;
+      resetOperation = true;
       operator = null;
       buffer = "" + accum;
       accum = 0;
@@ -69,9 +74,10 @@ function handleMath(value) {
     accum = intBuffer;
   } else {
     flushOperation(intBuffer);
+    buffer = "" + accum;
   }
 
-  buffer = "0";
+  resetBuffer = true;
   operator = value;
 }
 
