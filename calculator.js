@@ -19,15 +19,25 @@ function buttonClick(value) {
 function handleDigit(value) {
   if (resetBuffer) {
     resetBuffer = false;
+    if (value === ".") {
+      buffer = "0.";
+      return;
+    }
     buffer = value;
     return;
   }
 
   if (buffer === "0") {
+    if (value === ".") {
+      buffer += value;
+      return;
+    }
     buffer = value;
-  } else if (value === "." && buffer.indexOf(".") !== -1) {
-    buffer += value;
-    return;
+  } else if (value === ".") {
+    if(buffer.indexOf(".") === -1) {
+      buffer += value;
+    }
+    return;    
   } else {
     buffer += value;
   }
